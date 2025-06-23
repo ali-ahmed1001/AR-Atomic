@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oxygen Atom AR Experience</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Oxygen Atom AR</title>
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
@@ -11,142 +11,323 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            touch-action: none;
         }
         
         body {
             background: #000;
-            color: white;
+            color: #fff;
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
-            position: relative;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
         
+        /* Main AR container */
         .ar-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            z-index: 1;
         }
         
+        /* UI Elements */
+        .ui-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        /* Top status bar */
         .status-bar {
             position: absolute;
-            top: 20px;
+            top: 15px;
             left: 0;
             width: 100%;
             text-align: center;
-            z-index: 100;
             background: rgba(0, 0, 0, 0.6);
-            padding: 12px;
-            font-size: 1.2rem;
-            backdrop-filter: blur(5px);
+            padding: 12px 20px;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00f2fe;
+            transition: opacity 0.5s ease;
+            pointer-events: auto;
         }
         
-        .status-bar.hidden {
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-        
-        .electron-info {
+        /* Bottom info panel */
+        .info-panel {
             position: absolute;
-            bottom: 20px;
+            bottom: 0;
             left: 0;
             width: 100%;
-            text-align: center;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 15px;
-            font-size: 1.1rem;
-            backdrop-filter: blur(5px);
+            background: rgba(0, 20, 40, 0.8);
+            backdrop-filter: blur(10px);
             border-top: 2px solid #00f2fe;
+            padding: 15px;
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
-            gap: 30px;
+            gap: 15px;
+            transition: transform 0.4s ease;
+            pointer-events: auto;
+        }
+        
+        .info-panel.hidden {
+            transform: translateY(100%);
         }
         
         .electron-type {
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-width: 100px;
+        }
+        
+        .electron-label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        
+        .electron-visual {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         .electron-color {
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            margin-top: 5px;
         }
         
         .s-color { background: #34C759; }
         .p-color { background: #AF52DE; }
         
+        /* Control buttons */
         .controls {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
+            top: 70px;
+            right: 15px;
             display: flex;
             flex-direction: column;
             gap: 15px;
+            z-index: 20;
+            pointer-events: auto;
         }
         
         .btn {
-            background: rgba(0, 40, 80, 0.7);
-            color: white;
-            border: none;
-            border-radius: 50%;
             width: 60px;
             height: 60px;
+            border-radius: 50%;
+            background: rgba(0, 40, 80, 0.8);
+            border: 2px solid #00f2fe;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: white;
+            font-size: 24px;
             cursor: pointer;
-            font-size: 1.5rem;
             backdrop-filter: blur(5px);
-            border: 2px solid #00f2fe;
             transition: all 0.3s ease;
         }
         
-        .btn:hover {
-            background: rgba(0, 114, 255, 0.7);
-            transform: scale(1.1);
+        .btn:active {
+            transform: scale(0.9);
+            background: rgba(0, 114, 255, 0.8);
         }
         
-        .btn i {
+        /* Marker help */
+        .marker-help {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 10, 20, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .marker-help h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #00f2fe;
+        }
+        
+        .marker-image {
+            width: 250px;
+            height: 250px;
+            border: 3px solid #00f2fe;
+            border-radius: 10px;
+            margin: 20px 0;
+            background: url('https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png') center/contain no-repeat;
+        }
+        
+        .marker-help p {
+            font-size: 18px;
+            max-width: 500px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .start-btn {
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.4);
+        }
+        
+        /* Loading indicator */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             font-size: 24px;
+            z-index: 5;
+            text-align: center;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 242, 254, 0.3);
+            border-top: 5px solid #00f2fe;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Reticle for centering */
+        .reticle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            z-index: 15;
+            pointer-events: none;
+        }
+        
+        .reticle::before, .reticle::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        .reticle::before {
+            width: 2px;
+            height: 20px;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .reticle::after {
+            width: 20px;
+            height: 2px;
+            top: 50%;
+            left: -20px;
+            transform: translateY(-50%);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .status-bar {
+                font-size: 14px;
+                padding: 10px 15px;
+                top: env(safe-area-inset-top, 15px);
+            }
+            
+            .btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .controls {
+                top: calc(env(safe-area-inset-top, 15px) + 60px);
+                right: 10px;
+            }
+            
+            .electron-label {
+                font-size: 12px;
+            }
+            
+            .info-panel {
+                padding: 12px 10px;
+                gap: 10px;
+            }
+            
+            .electron-type {
+                min-width: 80px;
+            }
+            
+            .marker-help h2 {
+                font-size: 22px;
+            }
+            
+            .marker-help p {
+                font-size: 16px;
+            }
+            
+            .marker-image {
+                width: 200px;
+                height: 200px;
+            }
+        }
+        
+        @media (max-height: 600px) {
+            .info-panel {
+                padding: 8px 10px;
+            }
+            
+            .electron-label {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="status-bar">
-        Point your camera at a Hiro marker to view the oxygen atom
+    <!-- Loading indicator -->
+    <div class="loading">
+        <div class="loading-spinner"></div>
+        <p>Loading AR Experience...</p>
     </div>
     
-    <div class="controls">
-        <button class="btn" id="speedBtn" title="Toggle animation speed">
-            <i>⚡</i>
-        </button>
-        <button class="btn" id="infoBtn" title="Toggle electron info">
-            <i>ℹ️</i>
-        </button>
+    <!-- Marker help screen -->
+    <div class="marker-help">
+        <h2>Oxygen Atom AR Experience</h2>
+        <div class="marker-image"></div>
+        <p>To view the oxygen atom, point your camera at this Hiro marker. You can print it or display it on another device.</p>
+        <button class="start-btn">Start AR Experience</button>
     </div>
     
-    <div class="electron-info" id="electronInfo">
-        <div class="electron-type">
-            <span>1s² Orbit</span>
-            <div class="electron-color s-color"></div>
-        </div>
-        <div class="electron-type">
-            <span>2s² Orbit</span>
-            <div class="electron-color s-color"></div>
-        </div>
-        <div class="electron-type">
-            <span>2p⁴ Orbit</span>
-            <div class="electron-color p-color"></div>
-        </div>
-    </div>
-    
+    <!-- AR container -->
     <div class="ar-container">
         <a-scene embedded arjs="sourceType: webcam; detectionMode: mono; maxDetectionRate: 60; debugUIEnabled: false;">
             <a-marker type="pattern" preset="hiro">
@@ -211,45 +392,133 @@
                         <a-sphere color="#5AC8FA" radius="0.05" position="0 0 0"></a-sphere>
                     </a-sphere>
                 </a-entity>
+                
+                <!-- Labels -->
+                <a-entity text="value: Oxygen Atom; color: white; align: center; width: 3" 
+                         position="0 1.8 0" scale="1.5 1.5 1.5"></a-entity>
             </a-marker>
             <a-entity camera></a-entity>
         </a-scene>
     </div>
     
+    <!-- UI Overlay -->
+    <div class="ui-overlay">
+        <div class="status-bar" id="statusBar">
+            Point your camera at a Hiro marker to view the oxygen atom
+        </div>
+        
+        <div class="controls">
+            <button class="btn" id="speedBtn" title="Toggle animation speed">
+                ⚡
+            </button>
+            <button class="btn" id="infoBtn" title="Toggle electron info">
+                ℹ️
+            </button>
+        </div>
+        
+        <div class="info-panel" id="infoPanel">
+            <div class="electron-type">
+                <div class="electron-label">1s² Orbit (2 electrons)</div>
+                <div class="electron-visual">
+                    <div class="electron-color s-color"></div>
+                    <div>Inner orbit</div>
+                </div>
+            </div>
+            <div class="electron-type">
+                <div class="electron-label">2s² Orbit (2 electrons)</div>
+                <div class="electron-visual">
+                    <div class="electron-color s-color"></div>
+                    <div>Middle orbit</div>
+                </div>
+            </div>
+            <div class="electron-type">
+                <div class="electron-label">2p⁴ Orbit (4 electrons)</div>
+                <div class="electron-visual">
+                    <div class="electron-color p-color"></div>
+                    <div>Outer orbit</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reticle"></div>
+    </div>
+    
     <script>
-        // Hide status bar after 5 seconds
-        setTimeout(() => {
-            document.querySelector('.status-bar').classList.add('hidden');
-        }, 5000);
-        
-        // Toggle electron info
-        document.getElementById('infoBtn').addEventListener('click', () => {
-            const info = document.getElementById('electronInfo');
-            info.style.display = info.style.display === 'none' ? 'flex' : 'none';
-        });
-        
-        // Toggle animation speed
-        let fastMode = false;
-        document.getElementById('speedBtn').addEventListener('click', () => {
-            fastMode = !fastMode;
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hide loading when AR is ready
+            setTimeout(() => {
+                document.querySelector('.loading').style.display = 'none';
+            }, 2000);
             
-            const orbits = ['inner-orbit', 'middle-orbit', 'outer-orbit'];
-            const durations = fastMode ? [1000, 2000, 3000] : [3000, 5000, 7000];
+            // Handle marker help screen
+            const markerHelp = document.querySelector('.marker-help');
+            const startBtn = document.querySelector('.start-btn');
             
-            orbits.forEach((id, index) => {
-                const orbit = document.getElementById(id);
-                const animation = orbit.querySelector('a-animation');
-                animation.setAttribute('dur', durations[index]);
+            startBtn.addEventListener('click', () => {
+                markerHelp.style.display = 'none';
             });
             
-            const btn = document.getElementById('speedBtn');
-            if (fastMode) {
-                btn.style.background = 'rgba(255, 204, 0, 0.7)';
-                btn.style.borderColor = '#FF9500';
-            } else {
-                btn.style.background = 'rgba(0, 40, 80, 0.7)';
-                btn.style.borderColor = '#00f2fe';
+            // Toggle electron info panel
+            const infoBtn = document.getElementById('infoBtn');
+            const infoPanel = document.getElementById('infoPanel');
+            
+            infoBtn.addEventListener('click', () => {
+                infoPanel.classList.toggle('hidden');
+            });
+            
+            // Toggle animation speed
+            let fastMode = false;
+            const speedBtn = document.getElementById('speedBtn');
+            
+            speedBtn.addEventListener('click', () => {
+                fastMode = !fastMode;
+                
+                const orbits = ['inner-orbit', 'middle-orbit', 'outer-orbit'];
+                const durations = fastMode ? [1000, 2000, 3000] : [3000, 5000, 7000];
+                
+                orbits.forEach((id, index) => {
+                    const orbit = document.getElementById(id);
+                    if (orbit) {
+                        const animation = orbit.querySelector('a-animation');
+                        animation.setAttribute('dur', durations[index]);
+                    }
+                });
+                
+                if (fastMode) {
+                    speedBtn.style.background = 'rgba(255, 204, 0, 0.8)';
+                    speedBtn.style.borderColor = '#FF9500';
+                } else {
+                    speedBtn.style.background = 'rgba(0, 40, 80, 0.8)';
+                    speedBtn.style.borderColor = '#00f2fe';
+                }
+            });
+            
+            // Hide status bar after 5 seconds
+            const statusBar = document.getElementById('statusBar');
+            setTimeout(() => {
+                statusBar.style.opacity = '0';
+                setTimeout(() => {
+                    statusBar.style.display = 'none';
+                }, 500);
+            }, 5000);
+            
+            // Handle device orientation
+            function handleOrientation() {
+                if (window.innerHeight > window.innerWidth) {
+                    // Portrait mode
+                    document.querySelector('.controls').style.top = '70px';
+                } else {
+                    // Landscape mode
+                    document.querySelector('.controls').style.top = '15px';
+                }
             }
+            
+            // Initial orientation check
+            handleOrientation();
+            
+            // Listen for orientation changes
+            window.addEventListener('resize', handleOrientation);
+            window.addEventListener('orientationchange', handleOrientation);
         });
     </script>
 </body>
