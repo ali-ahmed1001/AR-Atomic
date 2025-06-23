@@ -501,70 +501,70 @@
                             </a-sphere>
                         </a-entity>
                         
-                       <!-- Orbit lines (horizontal orientation) -->
-<a-ring id="orbit1" color="#00ffaa" radius-inner="0.8" radius-outer="0.82" position="0 0.5 0" rotation="90 0 0" opacity="0.5"></a-ring>
-<a-ring id="orbit2" color="#00ffaa" radius-inner="1.4" radius-outer="1.42" position="0 0.5 0" rotation="90 0 0" opacity="0.5"></a-ring>
-<a-ring id="orbit3" color="#d66efd" radius-inner="2.0" radius-outer="2.02" position="0 0.5 0" rotation="90 0 0" opacity="0.5"></a-ring>
+                        <!-- Orbit lines (horizontal orientation) -->
+                        <a-ring id="orbit1" color="#00ffaa" radius-inner="0.8" radius-outer="0.82" position="0 0.5 0" rotation="90 0 0" opacity="0.5"></a-ring>
+                        <a-ring id="orbit2" color="#00ffaa" radius-inner="1.4" radius-outer="1.42" position="0 0.5 0" rotation="90 0 0" opacity="0.5"></a-ring>
+                        <a-ring id="orbit3" color="#d66efd" radius-inner="2.0" radius-outer="2.02" position="0 0.5 0" rotation="90 0 0" opacity="0.5"></a-ring>
                         
-                      <!-- Inner Orbit (2 electrons) - 1s² -->
-<a-entity id="inner-orbit" rotation="0 0 0">
-    <a-animation attribute="rotation"
-        from="0 0 0"
-        to="360 0 0"
-        dur="5000"
-        repeat="indefinite"
-        easing="linear"></a-animation>
+                        <!-- Inner Orbit (2 electrons) - 1s² -->
+                        <a-entity id="inner-orbit" rotation="0 0 0">
+                            <a-animation attribute="rotation"
+                                from="0 0 0"
+                                to="360 0 0"
+                                dur="5000"
+                                repeat="indefinite"
+                                easing="linear"></a-animation>
                             
                             <!-- Electrons positioned on the orbit line -->
-    <a-sphere class="electron" color="#00ffaa" radius="0.1" position="0 0 0.8">
-        <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
-    </a-sphere>
-    <a-sphere class="electron" color="#00ffaa" radius="0.1" position="0 0 -0.8">
-        <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
-    </a-sphere>
-</a-entity>
+                            <a-sphere class="electron" color="#00ffaa" radius="0.1" position="0 0 0.8">
+                                <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
+                            </a-sphere>
+                            <a-sphere class="electron" color="#00ffaa" radius="0.1" position="0 0 -0.8">
+                                <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
+                            </a-sphere>
+                        </a-entity>
                         
-                      <!-- Middle Orbit (2 electrons) - 2s² -->
-<a-entity id="middle-orbit" rotation="0 0 0">
-    <a-animation attribute="rotation"
-        from="0 0 0"
-        to="360 0 0"
-        dur="8000"
-        repeat="indefinite"
-        easing="linear"></a-animation>
-                           <!-- Electrons positioned on the orbit line -->
-    <a-sphere class="electron" color="#00ffaa" radius="0.1" position="0 0 1.4">
-        <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
-    </a-sphere>
-    <a-sphere class="electron" color="#00ffaa" radius="0.1" position="0 0 -1.4">
-        <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
-    </a-sphere>
-</a-entity>
-
-                        
-                       <!-- Outer Orbit (4 electrons) - 2p⁴ -->
-<a-entity id="outer-orbit" rotation="0 0 0">
-    <a-animation attribute="rotation"
-        from="0 0 0"
-        to="360 0 0"
-        dur="12000"
-        repeat="indefinite"
-        easing="linear"></a-animation>
+                        <!-- Middle Orbit (2 electrons) - 2s² -->
+                        <a-entity id="middle-orbit" rotation="0 0 0">
+                            <a-animation attribute="rotation"
+                                from="0 0 0"
+                                to="360 0 0"
+                                dur="8000"
+                                repeat="indefinite"
+                                easing="linear"></a-animation>
                             
-                          <!-- Electrons positioned on the orbit line -->
-    <a-sphere class="electron" color="#d66efd" radius="0.1" position="0 0 2.0">
-        <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
-    </a-sphere>
-    <a-sphere class="electron" color="#d66efd" radius="0.1" position="0 0 -2.0">
-        <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
-    </a-sphere>
-    <a-sphere class="electron" color="#d66efd" radius="0.1" position="0 1.4 1.4">
-        <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
-    </a-sphere>
-    <a-sphere class="electron" color="#d66efd" radius="0.1" position="0 -1.4 -1.4">
-        <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
-    </a-sphere>
-</a-entity>
+                            <!-- Electrons positioned on the orbit line -->
+                            <a-sphere class="electron" color="#00ffaa" radius="0.1" position="0 0 1.4">
+                                <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
+                            </a-sphere>
+                            <a-sphere class="electron" color="#00ffaa" radius="0.1" position="0 0 -1.4">
+                                <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
+                            </a-sphere>
+                        </a-entity>
+                        
+                        <!-- Outer Orbit (4 electrons) - 2p⁴ -->
+                        <a-entity id="outer-orbit" rotation="0 0 0">
+                            <a-animation attribute="rotation"
+                                from="0 0 0"
+                                to="360 0 0"
+                                dur="12000"
+                                repeat="indefinite"
+                                easing="linear"></a-animation>
+                            
+                            <!-- Electrons positioned on the orbit line -->
+                            <a-sphere class="electron" color="#d66efd" radius="0.1" position="0 0 2.0">
+                                <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
+                            </a-sphere>
+                            <a-sphere class="electron" color="#d66efd" radius="0.1" position="0 0 -2.0">
+                                <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
+                            </a-sphere>
+                            <a-sphere class="electron" color="#d66efd" radius="0.1" position="0 1.4 1.4">
+                                <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
+                            </a-sphere>
+                            <a-sphere class="electron" color="#d66efd" radius="0.1" position="0 -1.4 -1.4">
+                                <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.25 0.25 0.25"></a-text>
+                            </a-sphere>
+                        </a-entity>
                         
                         <!-- Atom label -->
                         <a-text value="Oxygen Atom" color="#00f7ff" align="center" position="0 2.5 0" scale="1.8 1.8 1.8"></a-text>
