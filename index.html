@@ -1,660 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Oxygen Atom AR Simulation</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oxygen Atom AR Experience</title>
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      }
-
-      body {
-        background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
-        color: white;
-        min-height: 100vh;
-        overflow: hidden;
-        position: relative;
-      }
-
-      .container {
-        display: flex;
-        flex-direction: column;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        height: 100vh;
-      }
-
-      header {
-        text-align: center;
-        padding: 20px 0;
-        z-index: 10;
-      }
-
-      h1 {
-        font-size: 2.8rem;
-        margin-bottom: 10px;
-        text-shadow: 0 0 10px rgba(0, 200, 255, 0.7);
-        background: linear-gradient(to right, #4facfe, #00f2fe);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      .subtitle {
-        font-size: 1.3rem;
-        opacity: 0.9;
-        max-width: 800px;
-        margin: 0 auto 20px;
-      }
-
-      .content {
-        display: flex;
-        flex: 1;
-        gap: 30px;
-      }
-
-      .info-panel {
-        flex: 1;
-        background: rgba(0, 20, 40, 0.7);
-        border-radius: 20px;
-        padding: 25px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        max-width: 400px;
-        overflow-y: auto;
-        max-height: 70vh;
-      }
-
-      .ar-container {
-        flex: 2;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        position: relative;
-        min-height: 500px;
-        background: rgba(0, 0, 0, 0.3);
-      }
-
-      .atom-info h2 {
-        font-size: 1.8rem;
-        margin-bottom: 20px;
-        color: #4facfe;
-        border-bottom: 2px solid #00f2fe;
-        padding-bottom: 10px;
-      }
-
-      .atom-stats {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        margin-bottom: 25px;
-      }
-
-      .stat-card {
-        background: rgba(0, 40, 80, 0.6);
-        border-radius: 12px;
-        padding: 15px;
-        text-align: center;
-      }
-
-      .stat-value {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #00f2fe;
-        margin: 5px 0;
-      }
-
-      .stat-label {
-        font-size: 0.9rem;
-        opacity: 0.8;
-      }
-
-      .orbital-diagram {
-        background: rgba(0, 30, 60, 0.6);
-        border-radius: 12px;
-        padding: 20px;
-        margin: 25px 0;
-        text-align: center;
-      }
-
-      .diagram-title {
-        font-size: 1.4rem;
-        margin-bottom: 15px;
-        color: #4facfe;
-      }
-
-      .orbitals {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-top: 15px;
-      }
-
-      .orbital {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        position: relative;
-      }
-
-      .orbital-1 {
-        background: radial-gradient(circle, #ff6b6b, #ff0000);
-        box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-      }
-
-      .orbital-2 {
-        background: radial-gradient(circle, #4facfe, #0066cc);
-        box-shadow: 0 0 15px rgba(0, 102, 204, 0.5);
-      }
-
-      .instructions {
-        background: rgba(0, 30, 60, 0.6);
-        border-radius: 12px;
-        padding: 20px;
-        margin-top: 25px;
-      }
-
-      .instructions h3 {
-        font-size: 1.4rem;
-        margin-bottom: 15px;
-        color: #4facfe;
-      }
-
-      .steps {
-        list-style-type: none;
-        counter-reset: step-counter;
-      }
-
-      .steps li {
-        margin-bottom: 15px;
-        padding-left: 35px;
-        position: relative;
-      }
-
-      .steps li:before {
-        counter-increment: step-counter;
-        content: counter(step-counter);
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 25px;
-        height: 25px;
-        background: #00f2fe;
-        color: #001428;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-      }
-
-      .warning {
-        color: #ff9e9e;
-        font-weight: bold;
-        margin-top: 10px;
-        background: rgba(255, 0, 0, 0.2);
-        padding: 10px;
-        border-radius: 8px;
-        border-left: 3px solid #ff6b6b;
-      }
-
-      .ar-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(0, 10, 20, 0.9);
-        z-index: 100;
-        flex-direction: column;
-        text-align: center;
-        padding: 30px;
-      }
-
-      .scan-icon {
-        width: 150px;
-        height: 150px;
-        border: 5px solid #00f2fe;
-        border-radius: 20px;
-        margin: 30px 0;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .scan-line {
-        position: absolute;
-        height: 4px;
-        width: 100%;
-        background: #00f2fe;
-        top: 0;
-        animation: scan 2s infinite;
-        box-shadow: 0 0 10px #00f2fe;
-      }
-
-      @keyframes scan {
-        0% {
-          top: 0;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        50% {
-          top: 100%;
+        
+        body {
+            background: #000;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        100% {
-          top: 100%;
-        }
-      }
-
-      .btn {
-        background: linear-gradient(to right, #00c6ff, #0072ff);
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        font-size: 1.1rem;
-        border-radius: 50px;
-        cursor: pointer;
-        margin-top: 20px;
-        font-weight: bold;
-        letter-spacing: 1px;
-        box-shadow: 0 5px 15px rgba(0, 114, 255, 0.4);
-        transition: all 0.3s ease;
-      }
-
-      .btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0, 114, 255, 0.6);
-      }
-
-      footer {
-        text-align: center;
-        padding: 20px;
-        font-size: 0.9rem;
-        opacity: 0.8;
-        margin-top: auto;
-      }
-
-      .atom-graphic {
-        position: absolute;
-        opacity: 0.1;
-        z-index: -1;
-      }
-
-      .atom-1 {
-        top: 10%;
-        left: 5%;
-        width: 200px;
-        height: 200px;
-      }
-
-      .atom-2 {
-        bottom: 10%;
-        right: 5%;
-        width: 300px;
-        height: 300px;
-      }
-
-      /* Responsive design */
-      @media (max-width: 900px) {
-        .content {
-          flex-direction: column;
-        }
-
-        .info-panel {
-          max-width: 100%;
-        }
-
+        
         .ar-container {
-          min-height: 400px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
-      }
+        
+        .status-bar {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 12px;
+            font-size: 1.2rem;
+            backdrop-filter: blur(5px);
+        }
+        
+        .status-bar.hidden {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        .electron-info {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            font-size: 1.1rem;
+            backdrop-filter: blur(5px);
+            border-top: 2px solid #00f2fe;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        
+        .electron-type {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .electron-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-top: 5px;
+        }
+        
+        .s-color { background: #34C759; }
+        .p-color { background: #AF52DE; }
+        
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .btn {
+            background: rgba(0, 40, 80, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            backdrop-filter: blur(5px);
+            border: 2px solid #00f2fe;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: rgba(0, 114, 255, 0.7);
+            transform: scale(1.1);
+        }
+        
+        .btn i {
+            font-size: 24px;
+        }
     </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>Oxygen Atom AR Simulation</h1>
-        <p class="subtitle">
-          Explore the quantum world with this interactive 3D model of an oxygen
-          atom using WebAR technology. See electrons orbiting the nucleus in
-          real-time!
-        </p>
-      </header>
-
-      <div class="content">
-        <div class="info-panel">
-          <div class="atom-info">
-            <h2>Oxygen Atom Structure</h2>
-            <p>
-              Oxygen (atomic number 8) has 8 protons and 8 neutrons in its
-              nucleus, surrounded by 8 electrons in different orbitals.
-            </p>
-
-            <div class="atom-stats">
-              <div class="stat-card">
-                <div class="stat-value">8</div>
-                <div class="stat-label">Protons</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">8</div>
-                <div class="stat-label">Neutrons</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">8</div>
-                <div class="stat-label">Electrons</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">16</div>
-                <div class="stat-label">Atomic Mass</div>
-              </div>
-            </div>
-
-            <div class="orbital-diagram">
-              <div class="diagram-title">Electron Configuration</div>
-              <p>1s² 2s² 2p⁴</p>
-              <div class="orbitals">
-                <div class="orbital orbital-1">1s (2e)</div>
-                <div class="orbital orbital-2">2s (2e)</div>
-                <div class="orbital orbital-2">2p (4e)</div>
-              </div>
-            </div>
-
-            <p>
-              The nucleus contains protons and neutrons, while electrons orbit
-              around it in specific energy levels called orbitals.
-            </p>
-          </div>
-
-          <div class="instructions">
-            <h3>How to View in AR</h3>
-            <ol class="steps">
-              <li>Allow camera access when prompted</li>
-              <li>
-                Print the
-                <a
-                  href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png"
-                  target="_blank"
-                  style="color: #00f2fe; text-decoration: none"
-                  >Hiro marker</a
-                >
-              </li>
-              <li>Point your camera at the printed marker</li>
-              <li>Move around to view the atom from different angles</li>
-              <li>Observe electrons orbiting at different speeds</li>
-            </ol>
-            <div class="warning">
-              Note: AR experience works best on mobile devices with good
-              lighting conditions
-            </div>
-          </div>
+</head>
+<body>
+    <div class="status-bar">
+        Point your camera at a Hiro marker to view the oxygen atom
+    </div>
+    
+    <div class="controls">
+        <button class="btn" id="speedBtn" title="Toggle animation speed">
+            <i>⚡</i>
+        </button>
+        <button class="btn" id="infoBtn" title="Toggle electron info">
+            <i>ℹ️</i>
+        </button>
+    </div>
+    
+    <div class="electron-info" id="electronInfo">
+        <div class="electron-type">
+            <span>1s² Orbit</span>
+            <div class="electron-color s-color"></div>
         </div>
-
-        <div class="ar-container">
-          <div class="ar-overlay">
-            <h2>Point Camera at Hiro Marker</h2>
-            <div class="scan-icon">
-              <div class="scan-line"></div>
-            </div>
-            <p>
-              For best results, print the Hiro marker on paper and place it on a
-              flat surface
-            </p>
-            <button
-              class="btn"
-              onclick="this.parentElement.style.display='none'"
-            >
-              Start AR Experience
-            </button>
-          </div>
-
-          <a-scene
-            embedded
-            arjs="sourceType: webcam; detectionMode: mono; maxDetectionRate: 60; debugUIEnabled: false;"
-          >
+        <div class="electron-type">
+            <span>2s² Orbit</span>
+            <div class="electron-color s-color"></div>
+        </div>
+        <div class="electron-type">
+            <span>2p⁴ Orbit</span>
+            <div class="electron-color p-color"></div>
+        </div>
+    </div>
+    
+    <div class="ar-container">
+        <a-scene embedded arjs="sourceType: webcam; detectionMode: mono; maxDetectionRate: 60; debugUIEnabled: false;">
             <a-marker type="pattern" preset="hiro">
-              <!-- Nucleus (protons and neutrons) -->
-              <a-sphere color="#FF3B30" radius="0.2" position="0 0.5 0">
-                <a-sphere
-                  color="#FF9500"
-                  radius="0.15"
-                  position="0.15 0.15 0.15"
-                ></a-sphere>
-                <a-sphere
-                  color="#FF9500"
-                  radius="0.15"
-                  position="-0.15 -0.15 0.15"
-                ></a-sphere>
-                <a-sphere
-                  color="#FF9500"
-                  radius="0.15"
-                  position="0.15 -0.15 -0.15"
-                ></a-sphere>
-                <a-sphere
-                  color="#FF9500"
-                  radius="0.15"
-                  position="-0.15 0.15 -0.15"
-                ></a-sphere>
-              </a-sphere>
-
-              <!-- Inner Orbit (2 electrons) -->
-              <a-entity id="inner-orbit" rotation="0 0 0">
-                <a-animation
-                  attribute="rotation"
-                  from="0 0 0"
-                  to="0 360 0"
-                  dur="4000"
-                  repeat="indefinite"
-                ></a-animation>
-
-                <a-sphere
-                  class="electron"
-                  color="#34C759"
-                  radius="0.08"
-                  position="0.8 0.5 0"
-                >
-                  <a-sphere
-                    color="#5AC8FA"
-                    radius="0.05"
-                    position="0 0 0"
-                  ></a-sphere>
+                <!-- Nucleus (protons and neutrons) -->
+                <a-sphere color="#FF3B30" radius="0.2" position="0 0.5 0">
+                    <a-sphere color="#FF9500" radius="0.15" position="0.15 0.15 0.15"></a-sphere>
+                    <a-sphere color="#FF9500" radius="0.15" position="-0.15 -0.15 0.15"></a-sphere>
+                    <a-sphere color="#FF9500" radius="0.15" position="0.15 -0.15 -0.15"></a-sphere>
+                    <a-sphere color="#FF9500" radius="0.15" position="-0.15 0.15 -0.15"></a-sphere>
                 </a-sphere>
-                <a-sphere
-                  class="electron"
-                  color="#34C759"
-                  radius="0.08"
-                  position="-0.8 0.5 0"
-                >
-                  <a-sphere
-                    color="#5AC8FA"
-                    radius="0.05"
-                    position="0 0 0"
-                  ></a-sphere>
-                </a-sphere>
-              </a-entity>
-
-              <!-- Middle Orbit (2 electrons) -->
-              <a-entity id="middle-orbit" rotation="0 30 30">
-                <a-animation
-                  attribute="rotation"
-                  from="0 30 30"
-                  to="360 30 30"
-                  dur="6000"
-                  repeat="indefinite"
-                ></a-animation>
-
-                <a-sphere
-                  class="electron"
-                  color="#FFCC00"
-                  radius="0.08"
-                  position="0 0.5 1.2"
-                >
-                  <a-sphere
-                    color="#5AC8FA"
-                    radius="0.05"
-                    position="0 0 0"
-                  ></a-sphere>
-                </a-sphere>
-                <a-sphere
-                  class="electron"
-                  color="#FFCC00"
-                  radius="0.08"
-                  position="0 0.5 -1.2"
-                >
-                  <a-sphere
-                    color="#5AC8FA"
-                    radius="0.05"
-                    position="0 0 0"
-                  ></a-sphere>
-                </a-sphere>
-              </a-entity>
-
-              <!-- Outer Orbit (4 electrons) -->
-              <a-entity id="outer-orbit" rotation="30 0 30">
-                <a-animation
-                  attribute="rotation"
-                  from="30 0 30"
-                  to="30 360 30"
-                  dur="8000"
-                  repeat="indefinite"
-                ></a-animation>
-
-                <a-sphere
-                  class="electron"
-                  color="#AF52DE"
-                  radius="0.08"
-                  position="1.2 1.3 0"
-                >
-                  <a-sphere
-                    color="#5AC8FA"
-                    radius="0.05"
-                    position="0 0 0"
-                  ></a-sphere>
-                </a-sphere>
-                <a-sphere
-                  class="electron"
-                  color="#AF52DE"
-                  radius="0.08"
-                  position="-1.2 1.3 0"
-                >
-                  <a-sphere
-                    color="#5AC8FA"
-                    radius="0.05"
-                    position="0 0 0"
-                  ></a-sphere>
-                </a-sphere>
-                <a-sphere
-                  class="electron"
-                  color="#AF52DE"
-                  radius="0.08"
-                  position="0 -0.3 1.2"
-                >
-                  <a-sphere
-                    color="#5AC8FA"
-                    radius="0.05"
-                    position="0 0 0"
-                  ></a-sphere>
-                </a-sphere>
-                <a-sphere
-                  class="electron"
-                  color="#AF52DE"
-                  radius="0.08"
-                  position="0 -0.3 -1.2"
-                >
-                  <a-sphere
-                    color="#5AC8FA"
-                    radius="0.05"
-                    position="0 0 0"
-                  ></a-sphere>
-                </a-sphere>
-              </a-entity>
-
-              <!-- Labels -->
-              <a-entity
-                text="value: Oxygen Atom; color: white; align: center; width: 3"
-                position="0 1.8 0"
-                scale="1.5 1.5 1.5"
-              ></a-entity>
+                
+                <!-- Inner Orbit (2 electrons) - 1s² -->
+                <a-entity id="inner-orbit" rotation="0 0 0">
+                    <a-animation attribute="rotation"
+                        from="0 0 0"
+                        to="0 360 0"
+                        dur="3000"
+                        repeat="indefinite"></a-animation>
+                    
+                    <a-sphere class="electron" color="#34C759" radius="0.08" position="0.8 0.5 0">
+                        <a-sphere color="#5AC8FA" radius="0.05" position="0 0 0"></a-sphere>
+                    </a-sphere>
+                    <a-sphere class="electron" color="#34C759" radius="0.08" position="-0.8 0.5 0">
+                        <a-sphere color="#5AC8FA" radius="0.05" position="0 0 0"></a-sphere>
+                    </a-sphere>
+                </a-entity>
+                
+                <!-- Middle Orbit (2 electrons) - 2s² -->
+                <a-entity id="middle-orbit" rotation="0 30 30">
+                    <a-animation attribute="rotation"
+                        from="0 30 30"
+                        to="360 30 30"
+                        dur="5000"
+                        repeat="indefinite"></a-animation>
+                    
+                    <a-sphere class="electron" color="#34C759" radius="0.08" position="0 0.5 1.2">
+                        <a-sphere color="#5AC8FA" radius="0.05" position="0 0 0"></a-sphere>
+                    </a-sphere>
+                    <a-sphere class="electron" color="#34C759" radius="0.08" position="0 0.5 -1.2">
+                        <a-sphere color="#5AC8FA" radius="0.05" position="0 0 0"></a-sphere>
+                    </a-sphere>
+                </a-entity>
+                
+                <!-- Outer Orbit (4 electrons) - 2p⁴ -->
+                <a-entity id="outer-orbit" rotation="30 0 30">
+                    <a-animation attribute="rotation"
+                        from="30 0 30"
+                        to="30 360 30"
+                        dur="7000"
+                        repeat="indefinite"></a-animation>
+                    
+                    <a-sphere class="electron" color="#AF52DE" radius="0.08" position="1.2 1.3 0">
+                        <a-sphere color="#5AC8FA" radius="0.05" position="0 0 0"></a-sphere>
+                    </a-sphere>
+                    <a-sphere class="electron" color="#AF52DE" radius="0.08" position="-1.2 1.3 0">
+                        <a-sphere color="#5AC8FA" radius="0.05" position="0 0 0"></a-sphere>
+                    </a-sphere>
+                    <a-sphere class="electron" color="#AF52DE" radius="0.08" position="0 -0.3 1.2">
+                        <a-sphere color="#5AC8FA" radius="0.05" position="0 0 0"></a-sphere>
+                    </a-sphere>
+                    <a-sphere class="electron" color="#AF52DE" radius="0.08" position="0 -0.3 -1.2">
+                        <a-sphere color="#5AC8FA" radius="0.05" position="0 0 0"></a-sphere>
+                    </a-sphere>
+                </a-entity>
             </a-marker>
             <a-entity camera></a-entity>
-          </a-scene>
-        </div>
-      </div>
-
-      <footer>
-        <p>
-          Interactive WebAR Experience | Oxygen Atom Simulation | Based on AR.js
-          and A-Frame
-        </p>
-        <p>
-          Note: For the best experience, use on a mobile device with a printed
-          Hiro marker
-        </p>
-      </footer>
+        </a-scene>
     </div>
-
-    <!-- Decorative atom graphics -->
-    <svg class="atom-graphic atom-1" viewBox="0 0 200 200">
-      <circle
-        cx="100"
-        cy="100"
-        r="40"
-        fill="none"
-        stroke="#00f2fe"
-        stroke-width="2"
-      />
-      <circle
-        cx="100"
-        cy="100"
-        r="70"
-        fill="none"
-        stroke="#4facfe"
-        stroke-width="2"
-        stroke-dasharray="5,5"
-      />
-      <circle cx="140" cy="100" r="10" fill="#00f2fe" />
-      <circle cx="100" cy="170" r="10" fill="#4facfe" />
-    </svg>
-
-    <svg class="atom-graphic atom-2" viewBox="0 0 300 300">
-      <circle
-        cx="150"
-        cy="150"
-        r="50"
-        fill="none"
-        stroke="#FF3B30"
-        stroke-width="3"
-      />
-      <circle
-        cx="150"
-        cy="150"
-        r="90"
-        fill="none"
-        stroke="#FFCC00"
-        stroke-width="2"
-        stroke-dasharray="5,5"
-      />
-      <circle
-        cx="150"
-        cy="150"
-        r="130"
-        fill="none"
-        stroke="#AF52DE"
-        stroke-width="2"
-        stroke-dasharray="3,3"
-      />
-      <circle cx="200" cy="150" r="15" fill="#FF3B30" />
-      <circle cx="150" cy="240" r="15" fill="#FFCC00" />
-      <circle cx="80" cy="150" r="15" fill="#AF52DE" />
-    </svg>
-  </body>
+    
+    <script>
+        // Hide status bar after 5 seconds
+        setTimeout(() => {
+            document.querySelector('.status-bar').classList.add('hidden');
+        }, 5000);
+        
+        // Toggle electron info
+        document.getElementById('infoBtn').addEventListener('click', () => {
+            const info = document.getElementById('electronInfo');
+            info.style.display = info.style.display === 'none' ? 'flex' : 'none';
+        });
+        
+        // Toggle animation speed
+        let fastMode = false;
+        document.getElementById('speedBtn').addEventListener('click', () => {
+            fastMode = !fastMode;
+            
+            const orbits = ['inner-orbit', 'middle-orbit', 'outer-orbit'];
+            const durations = fastMode ? [1000, 2000, 3000] : [3000, 5000, 7000];
+            
+            orbits.forEach((id, index) => {
+                const orbit = document.getElementById(id);
+                const animation = orbit.querySelector('a-animation');
+                animation.setAttribute('dur', durations[index]);
+            });
+            
+            const btn = document.getElementById('speedBtn');
+            if (fastMode) {
+                btn.style.background = 'rgba(255, 204, 0, 0.7)';
+                btn.style.borderColor = '#FF9500';
+            } else {
+                btn.style.background = 'rgba(0, 40, 80, 0.7)';
+                btn.style.borderColor = '#00f2fe';
+            }
+        });
+    </script>
+</body>
 </html>
