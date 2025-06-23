@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Oxygen Atom AR</title>
+    <title>Enhanced Oxygen Atom AR</title>
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -308,6 +308,22 @@
                 font-size: 1.4rem;
             }
         }
+        
+        /* Enhancement indicators */
+        .enhancement-info {
+            position: absolute;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 95;
+            background: rgba(0, 40, 80, 0.7);
+            padding: 10px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid #00f7ff;
+            color: #00f7ff;
+        }
     </style>
 </head>
 <body>
@@ -316,8 +332,8 @@
             <div class="logo">
                 <i class="fas fa-atom"></i>
             </div>
-            <h1 class="title">Oxygen Atom AR Experience</h1>
-            <p class="subtitle">Visualize the quantum structure of an oxygen atom with electrons orbiting around the nucleus in augmented reality</p>
+            <h1 class="title">Enhanced Oxygen Atom AR</h1>
+            <p class="subtitle">Now with improved nucleus visualization and more accurate electron orbits</p>
             
             <div class="marker-container">
                 <div class="marker-preview">
@@ -331,19 +347,23 @@
             </button>
             
             <div class="instructions">
-                <h3>How to Use</h3>
+                <h3>What's Improved</h3>
                 <ol class="steps">
-                    <li>Allow camera access when prompted</li>
-                    <li>Print the Hiro marker or display it on another device</li>
-                    <li>Point your camera at the marker in a well-lit area</li>
-                    <li>Move around to view the atom from different angles</li>
-                    <li>Use controls to adjust the visualization</li>
+                    <li>Single large nucleus sphere instead of multiple particles</li>
+                    <li>Electrons now precisely follow orbital paths</li>
+                    <li>Enhanced rotation mechanics for electrons</li>
+                    <li>Improved visual representation of quantum orbits</li>
+                    <li>Optimized for better AR performance</li>
                 </ol>
             </div>
         </div>
         
         <div class="status-bar" id="statusBar">
             Searching for Hiro marker... Point your camera at the marker
+        </div>
+        
+        <div class="enhancement-info">
+            Enhancements applied: Nucleus size, Electron orbits, Rotation mechanics
         </div>
         
         <div class="atom-info" id="atomInfo">
@@ -376,58 +396,13 @@
         <div class="ar-container" id="arContainer">
             <a-scene embedded arjs="sourceType: webcam; detectionMode: mono; maxDetectionRate: 60; debugUIEnabled: false;">
                 <a-marker type="pattern" preset="hiro">
-                    <!-- Nucleus with protons and neutrons -->
+                    <!-- Enhanced Nucleus: Single large sphere -->
                     <a-entity id="nucleus" position="0 0.5 0">
-                        <!-- Protons -->
-                        <a-sphere color="#FF3B30" radius="0.15" position="-0.1 0 0">
-                            <a-text value="p" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
+                        <a-sphere color="#FF3B30" radius="0.35" position="0 0 0">
+                            <a-text value="8p⁺" color="white" align="center" position="0 0 0.36" scale="0.3 0.3 0.3"></a-text>
                         </a-sphere>
-                        <a-sphere color="#FF3B30" radius="0.15" position="0.1 0 0">
-                            <a-text value="p" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF3B30" radius="0.15" position="0 0.1 0">
-                            <a-text value="p" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF3B30" radius="0.15" position="0 -0.1 0">
-                            <a-text value="p" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF3B30" radius="0.15" position="0 0 0.1">
-                            <a-text value="p" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF3B30" radius="0.15" position="0 0 -0.1">
-                            <a-text value="p" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF3B30" radius="0.15" position="0.1 0.1 0.1">
-                            <a-text value="p" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF3B30" radius="0.15" position="-0.1 -0.1 -0.1">
-                            <a-text value="p" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        
-                        <!-- Neutrons -->
-                        <a-sphere color="#FF9500" radius="0.15" position="0.15 0.15 0">
-                            <a-text value="n" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF9500" radius="0.15" position="-0.15 -0.15 0">
-                            <a-text value="n" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF9500" radius="0.15" position="0.15 -0.15 0">
-                            <a-text value="n" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF9500" radius="0.15" position="-0.15 0.15 0">
-                            <a-text value="n" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF9500" radius="0.15" position="0 0.15 0.15">
-                            <a-text value="n" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF9500" radius="0.15" position="0 -0.15 -0.15">
-                            <a-text value="n" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF9500" radius="0.15" position="0.15 0 -0.15">
-                            <a-text value="n" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
-                        </a-sphere>
-                        <a-sphere color="#FF9500" radius="0.15" position="-0.15 0 0.15">
-                            <a-text value="n" color="white" align="center" position="0 0 0.16" scale="0.3 0.3 0.3"></a-text>
+                        <a-sphere color="#FF9500" radius="0.35" position="0.15 0.1 0.1">
+                            <a-text value="8n⁰" color="white" align="center" position="0 0 0.36" scale="0.3 0.3 0.3"></a-text>
                         </a-sphere>
                     </a-entity>
                     
@@ -444,11 +419,12 @@
                             dur="3000"
                             repeat="indefinite"></a-animation>
                         
-                        <a-sphere class="electron" color="#00ffaa" radius="0.08" position="0.8 0.5 0">
-                            <a-text value="e" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
+                        <!-- Electrons positioned on the orbit line -->
+                        <a-sphere class="electron" color="#00ffaa" radius="0.08" position="0.7 0 0">
+                            <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
                         </a-sphere>
-                        <a-sphere class="electron" color="#00ffaa" radius="0.08" position="-0.8 0.5 0">
-                            <a-text value="e" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
+                        <a-sphere class="electron" color="#00ffaa" radius="0.08" position="-0.7 0 0">
+                            <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
                         </a-sphere>
                     </a-entity>
                     
@@ -460,11 +436,12 @@
                             dur="5000"
                             repeat="indefinite"></a-animation>
                         
-                        <a-sphere class="electron" color="#00ffaa" radius="0.08" position="0 0.5 1.2">
-                            <a-text value="e" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
+                        <!-- Electrons positioned on the orbit line -->
+                        <a-sphere class="electron" color="#00ffaa" radius="0.08" position="0 0 1.1">
+                            <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
                         </a-sphere>
-                        <a-sphere class="electron" color="#00ffaa" radius="0.08" position="0 0.5 -1.2">
-                            <a-text value="e" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
+                        <a-sphere class="electron" color="#00ffaa" radius="0.08" position="0 0 -1.1">
+                            <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
                         </a-sphere>
                     </a-entity>
                     
@@ -476,17 +453,18 @@
                             dur="7000"
                             repeat="indefinite"></a-animation>
                         
-                        <a-sphere class="electron" color="#d66efd" radius="0.08" position="1.2 1.3 0">
-                            <a-text value="e" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
+                        <!-- Electrons positioned on the orbit line -->
+                        <a-sphere class="electron" color="#d66efd" radius="0.08" position="1.5 0 0">
+                            <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
                         </a-sphere>
-                        <a-sphere class="electron" color="#d66efd" radius="0.08" position="-1.2 1.3 0">
-                            <a-text value="e" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
+                        <a-sphere class="electron" color="#d66efd" radius="0.08" position="-1.5 0 0">
+                            <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
                         </a-sphere>
-                        <a-sphere class="electron" color="#d66efd" radius="0.08" position="0 -0.3 1.2">
-                            <a-text value="e" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
+                        <a-sphere class="electron" color="#d66efd" radius="0.08" position="0 0 1.5">
+                            <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
                         </a-sphere>
-                        <a-sphere class="electron" color="#d66efd" radius="0.08" position="0 -0.3 -1.2">
-                            <a-text value="e" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
+                        <a-sphere class="electron" color="#d66efd" radius="0.08" position="0 0 -1.5">
+                            <a-text value="e⁻" color="white" align="center" position="0 0 0.11" scale="0.2 0.2 0.2"></a-text>
                         </a-sphere>
                     </a-entity>
                     
@@ -542,9 +520,11 @@
                 if (fastMode) {
                     speedBtn.style.background = 'rgba(255, 204, 0, 0.7)';
                     speedBtn.style.borderColor = '#FF9500';
+                    speedBtn.innerHTML = '<i class="fas fa-bolt"></i>';
                 } else {
                     speedBtn.style.background = 'rgba(0, 40, 80, 0.7)';
                     speedBtn.style.borderColor = '#00f7ff';
+                    speedBtn.innerHTML = '<i class="fas fa-bolt"></i>';
                 }
             });
             
@@ -555,6 +535,16 @@
                     statusBar.style.display = 'none';
                 }, 1000);
             }, 5000);
+            
+            // Electron rotation enhancement
+            const orbits = ['inner-orbit', 'middle-orbit', 'outer-orbit'];
+            orbits.forEach(id => {
+                const orbit = document.getElementById(id);
+                if (orbit) {
+                    const animation = orbit.querySelector('a-animation');
+                    animation.setAttribute('easing', 'linear');
+                }
+            });
         });
     </script>
 </body>
